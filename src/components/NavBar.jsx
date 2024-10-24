@@ -16,7 +16,7 @@ export default function NavBar({ activeTab, setActiveTab }) {
     <nav className="bg-gradient-to-r from-blue-800 to-purple-800 text-gray-100 p-4 sticky top-0 z-10 shadow-lg">
       <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
         <h1 className="text-3xl font-bold mb-4 sm:mb-0 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-400">
-          SkillOrbit
+        SkillOrbit
         </h1>
         <ul className="flex flex-wrap justify-center space-x-2 space-y-2 sm:space-y-0">
           {navItems.map((item) => (
