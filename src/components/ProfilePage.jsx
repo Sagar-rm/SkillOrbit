@@ -1,174 +1,134 @@
+'use client'
+
 import React from 'react'
+import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import  Progress  from "../components/ui/progress.jsx"
 import { Badge } from "@/components/ui/badge"
-import { Zap, Award, Star, TrendingUp, CheckCircle2, Clock } from 'lucide-react'
+import   Progress  from "../components/ui/progress.jsx"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Rocket, Star, Zap, Award, Users, Book, Globe, Shield, TrendingUp } from 'lucide-react'
 
-export default function ProfilePage({ userPoints, completedChallenges }) {
-  const level = Math.floor(userPoints / 100) + 1
-  const nextLevelPoints = level * 100
-  const totalChallenges = 20 // Assuming there are 20 total challenges
-
-  const challengeCategories = [
-    { name: "Coding", completed: 8, total: 10 },
-    { name: "Design", completed: 3, total: 5 },
-    { name: "Data Science", completed: 2, total: 5 },
-  ]
+export default function ProfilePage() {
+  const user = {
+    name: "Stella Nova",
+    title: "Interstellar Developer",
+    avatar: "/astronaut-avatar.png",
+    level: 42,
+    exp: 7800,
+    nextLevelExp: 10000,
+    skills: [
+      { name: "JavaScript", level: 85 },
+      { name: "React", level: 92 },
+      { name: "Node.js", level: 78 },
+      { name: "Python", level: 70 },
+      { name: "UI/UX Design", level: 65 },
+    ],
+    achievements: [
+      { name: "Code Voyager", icon: Rocket },
+      { name: "Bug Buster", icon: Shield },
+      { name: "API Astronaut", icon: Globe },
+    ],
+    stats: [
+      { name: "Challenges Completed", value: 127, icon: Zap },
+      { name: "Contributions", value: 89, icon: Users },
+      { name: "Cosmic Points", value: 12500, icon: Star },
+    ]
+  }
 
   return (
-    <div className="space-y-8">
-      <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-pink-400 to-yellow-400 bg-clip-text text-transparent">Your SkillOrbit Dashboard</h2>
-      
-      {/* User Info Section */}
-      <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-8">
-        <Avatar className="h-32 w-32 border-4 border-pink-500">
-          <AvatarImage src="https://i.pravatar.cc/128" alt="User" />
-          <AvatarFallback>UN</AvatarFallback>
+    <div className="space-y-8 p-6">
+      <motion.div 
+        className="text-center space-y-4"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Avatar className="w-32 h-32 mx-auto border-4 border-yellow-400">
+          <AvatarImage src={user.avatar} alt={user.name} />
+          <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
         </Avatar>
-        <div className="text-center md:text-left">
-          <h3 className="text-3xl font-semibold text-pink-400">Jane Doe</h3>
-          <p className="text-xl text-gray-300">Full Stack Developer</p>
-          <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-2">
-            <Badge className="bg-blue-600">JavaScript</Badge>
-            <Badge className="bg-green-600">React</Badge>
-            <Badge className="bg-yellow-600">Node.js</Badge>
-            <Badge className="bg-purple-600">GraphQL</Badge>
-          </div>
-        </div>
-      </div>
+        <h2 className="text-4xl font-bold text-pink-400">{user.name}</h2>
+        <p className="text-xl text-gray-300">{user.title}</p>
+        <Badge variant="outline" className="text-yellow-400 border-yellow-400">
+          Level {user.level} Space Explorer
+        </Badge>
+      </motion.div>
 
-      {/* Dashboard Overview */}
-      <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
-        <CardHeader>
-          <CardTitle className="text-2xl text-pink-400">Your Progress Dashboard</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-blue-900/50 p-4 rounded-lg">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-yellow-400">Total Points</p>
-                    <p className="text-3xl font-bold text-pink-400">{userPoints}</p>
-                  </div>
-                  <Star className="h-8 w-8 text-yellow-400" />
+      <motion.div
+        className="grid gap-6 md:grid-cols-2"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
+          <CardHeader>
+            <CardTitle className="text-2xl text-pink-400">Skill Constellations</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {user.skills.map((skill, index) => (
+              <div key={index} className="space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-300">{skill.name}</span>
+                  <span className="text-gray-400">{skill.level}%</span>
                 </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-purple-900/50 p-4 rounded-lg">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-yellow-400">Current Level</p>
-                    <p className="text-3xl font-bold text-pink-400">{level}</p>
-                  </div>
-                  <TrendingUp className="h-8 w-8 text-yellow-400" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-green-900/50 p-4 rounded-lg">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-yellow-400">Challenges Completed</p>
-                    <p className="text-3xl font-bold text-pink-400">{completedChallenges.length} / {totalChallenges}</p>
-                  </div>
-                  <CheckCircle2 className="h-8 w-8 text-yellow-400" />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-yellow-900/50 p-4 rounded-lg">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-yellow-400">Time Spent Learning</p>
-                    <p className="text-3xl font-bold text-pink-400">24h 35m</p>
-                  </div>
-                  <Clock className="h-8 w-8 text-yellow-400" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Level Progress */}
-      <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
-        <CardHeader>
-          <CardTitle className="text-2xl text-pink-400">Level Progress</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm font-medium text-gray-300">Level {level}</span>
-              <span className="text-sm font-medium text-gray-300">{userPoints} / {nextLevelPoints} XP</span>
-            </div>
-            <Progress value={(userPoints % 100) * 100 / nextLevelPoints} className="h-2 bg-gray-700" indicatorClassName="bg-gradient-to-r from-pink-500 to-yellow-500" />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Challenge Progress */}
-      <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
-        <CardHeader>
-          <CardTitle className="text-2xl text-pink-400">Challenge Progress</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {challengeCategories.map((category, index) => (
-              <div key={index}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-300">{category.name}</span>
-                  <span className="text-sm font-medium text-gray-300">{category.completed} / {category.total}</span>
-                </div>
-                <Progress value={(category.completed / category.total) * 100} className="h-2 bg-gray-700" indicatorClassName="bg-gradient-to-r from-pink-500 to-yellow-500" />
+                <Progress value={skill.level} className="h-4 w-full bg-secondary" />
               </div>
             ))}
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Recent Achievements */}
-      <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
-        <CardHeader>
-          <CardTitle className="text-2xl text-pink-400">Recent Achievements</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2">
-            {['Code Ninja', 'Design Guru', 'Quick Learner'].map((achievement, index) => (
-              <li key={index} className="flex items-center space-x-2">
-                <Award className="text-yellow-400" />
-                <span className="text-gray-300">{achievement}</span>
-              </li>
+        <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
+          <CardHeader>
+            <CardTitle className="text-2xl text-pink-400">Cosmic Achievements</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-3 gap-4">
+            {user.achievements.map((achievement, index) => (
+              <div key={index} className="text-center">
+                <achievement.icon className="h-12 w-12 text-yellow-400 mx-auto mb-2" />
+                <p className="text-sm text-gray-300">{achievement.name}</p>
+              </div>
             ))}
-          </ul>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
-      {/* Skill Progress */}
-      <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
-        <CardHeader>
-          <CardTitle className="text-2xl text-pink-400">Skill Progress</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-4">
-            {[
-              { skill: 'JavaScript', progress: 75 },
-              { skill: 'React', progress: 60 },
-              { skill: 'Node.js', progress: 45 },
-            ].map((skill, index) => (
-              <li key={index}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-gray-300">{skill.skill}</span>
-                  <span className="text-gray-300">{skill.progress}%</span>
-                </div>
-                <Progress value={skill.progress} className="h-2 bg-gray-700" indicatorClassName="bg-gradient-to-r from-pink-500 to-yellow-500" />
-              </li>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+      >
+        <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500">
+          <CardHeader>
+            <CardTitle className="text-2xl text-pink-400">Galactic Stats</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-3 gap-6">
+            {user.stats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <stat.icon className="h-12 w-12 text-yellow-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-gray-200">{stat.value}</p>
+                <p className="text-sm text-gray-400">{stat.name}</p>
+              </div>
             ))}
-          </ul>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        className="mt-8"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+      >
+        <Card className="bg-gradient-to-br from-blue-900 to-purple-900 border-2 border-pink-500">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-lg text-gray-300">Experience</span>
+              <span className="text-lg text-yellow-400">{user.exp} / {user.nextLevelExp} XP</span>
+            </div>
+            <Progress value={(user.exp / user.nextLevelExp) * 100} className="h-4 w-full bg-secondary" />
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 }

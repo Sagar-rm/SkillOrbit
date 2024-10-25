@@ -14,9 +14,9 @@ export default function AboutPage() {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-pink-400 to-yellow-400 bg-clip-text text-transparent">About Skill Forge</h2>
+      <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-pink-400 to-yellow-400 bg-clip-text text-transparent">About SkillOrbit</h2>
       <p className="text-xl text-gray-300 text-center max-w-3xl mx-auto">
-        Skill Forge is a cutting-edge platform designed to help you hone your skills in coding, design, and more.
+        SkillOrbit is a cutting-edge platform designed to help you hone your skills in coding, design, and more.
         With daily challenges, a competitive leaderboard, and a supportive community, you'll be forging your path to success in no time.
       </p>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
@@ -33,7 +33,7 @@ export default function AboutPage() {
       <div className="mt-16 bg-gradient-to-r from-blue-900 to-purple-900 p-8 rounded-lg shadow-2xl">
         <h3 className="text-3xl font-bold text-center text-pink-400 mb-6">Our Mission</h3>
         <p className="text-xl text-gray-200 text-center">
-          At Skill Forge, we're committed to empowering individuals to reach their full potential in the ever-evolving world of technology and design. 
+          At SkillOrbit, we're committed to empowering individuals to reach their full potential in the ever-evolving world of technology and design. 
           Our platform is built on the belief that continuous learning and practical application are the keys to success in the digital age.
         </p>
       </div>
