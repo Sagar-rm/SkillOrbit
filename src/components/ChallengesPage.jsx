@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import  Progress  from "../components/ui/progress.jsx"
+import Progress from "../components/ui/progress.jsx"
 import { Rocket, Star, Clock, Zap, Award, Users } from 'lucide-react'
 
 const challenges = [
@@ -55,7 +55,7 @@ export default function ChallengesPage() {
   return (
     <div className="space-y-8 p-6">
       <motion.h2 
-        className="text-4xl font-bold text-center bg-gradient-to-r from-pink-400 to-yellow-400 bg-clip-text text-transparent"
+        className="text-4xl font-bold text-center bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -78,14 +78,15 @@ export default function ChallengesPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
           >
-            <Card className="bg-gradient-to-br from-blue-800 to-purple-800 border-2 border-pink-500 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105">
+            <Card className="bg-gradient-to-br from-slate-800 to-indigo-900 border-2 border-indigo-500 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span className="text-2xl text-pink-400">{challenge.title}</span>
-                  <Badge variant="outline" className="bg-yellow-400 text-blue-900">
+                  <span className="text-2xl text-indigo-400">{challenge.title}</span>
+                  <Badge variant="outline" className="bg-cyan-400 text-slate-900">
                     {challenge.difficulty}
                   </Badge>
                 </CardTitle>
+              
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-gray-300">{challenge.description}</p>
@@ -108,9 +109,9 @@ export default function ChallengesPage() {
                     <span className="text-gray-400">Completion Rate</span>
                     <span className="text-gray-400">{challenge.completionRate}%</span>
                   </div>
-                  <Progress value={challenge.completionRate} className="h-4 w-full bg-secondary" />
+                  <Progress value={challenge.completionRate} className="h-4 w-full bg-slate-700" />
                 </div>
-                <Button className="w-full bg-gradient-to-r from-pink-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600 text-white">
+                <Button className="w-full bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white">
                   <Rocket className="mr-2 h-4 w-4" /> Launch Challenge
                 </Button>
               </CardContent>

@@ -25,8 +25,8 @@ export default function SkillBuildingPlatform() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-pink-800 text-gray-100">
-      <NavBar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-gray-100">
+      <NavBar activeTab={activeTab} setActiveTab={setActiveTab} userPoints={userPoints} />
       <main className="container mx-auto p-4 pt-24 space-y-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsContent value="home"><HomePage /></TabsContent>
@@ -44,9 +44,9 @@ export default function SkillBuildingPlatform() {
               completedChallenges={completedChallenges} 
             />
           </TabsContent>
-          <TabsContent value="achievements"><AchievementsPage />        <LeaderboardPage />
-          </TabsContent>
+          <TabsContent value="achievements"><AchievementsPage /></TabsContent>
           <TabsContent value="mentorship"><MentorshipPage /></TabsContent>
+          <TabsContent value="leaderboard"><LeaderboardPage /></TabsContent>
         </Tabs>
       </main>
     </div>

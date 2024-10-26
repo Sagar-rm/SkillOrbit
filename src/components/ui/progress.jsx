@@ -1,9 +1,11 @@
-import * as React from "react";
-import * as ProgressPrimitive from "@radix-ui/react-progress";
-import PropTypes from "prop-types";
-import { cn } from "@/lib/utils";
+"use client"
 
-const Progress = React.forwardRef(({ className, value = 0, ...props }, ref) => (
+import * as React from "react"
+import * as ProgressPrimitive from "@radix-ui/react-progress"
+
+import { cn } from "@/lib/utils"
+
+const Progress = React.forwardRef(({ className, value, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
@@ -14,20 +16,10 @@ const Progress = React.forwardRef(({ className, value = 0, ...props }, ref) => (
   >
     <ProgressPrimitive.Indicator
       className="h-full w-full flex-1 bg-primary transition-all"
-      style={{ transform: `translateX(-${100 - value}%)` }} // Value defaults to 0 if not provided
+      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
     />
   </ProgressPrimitive.Root>
-));
-
-Progress.displayName = ProgressPrimitive.Root.displayName;
-
-Progress.propTypes = {
-  className: PropTypes.string,
-  value: PropTypes.number, // Ensures 'value' is a number
-};
-
-Progress.defaultProps = {
-  value: 0, // Default value if not passed
-};
+))
+Progress.displayName = ProgressPrimitive.Root.displayName
 
 export default Progress;
