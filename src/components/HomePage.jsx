@@ -9,6 +9,9 @@ import { useInView } from 'react-intersection-observer'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Sphere, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
+import  Satellite  from '@/assets/satellite.png'
+import  Astronut from '@/assets/astrounat.png'
+
 
 const EarthSphere = () => {
   const earthRef = useRef()
@@ -22,25 +25,27 @@ const EarthSphere = () => {
 
   return (
     <>
-      <ambientLight intensity={0.1} />
-      <pointLight position={[10, 10, 10]} intensity={1.5} />
+      <ambientLight intensity={0.3} />
+      <pointLight position={[10, 10, 10]} intensity={2} />
       <Sphere ref={earthRef} args={[1, 64, 64]} rotation={[0, 0, 0.3]}>
         <meshPhongMaterial
           map={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
           bumpMap={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
           bumpScale={0.05}
-          color={new THREE.Color('#4299e1')} // Tailwind's blue-500
+          emissiveMap={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
+          emissive={new THREE.Color('#4299e1')}
+          emissiveIntensity={0.5}
         />
       </Sphere>
       <Sphere ref={cloudRef} args={[1.01, 64, 64]}>
         <meshPhongMaterial
-          map={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
+          // map={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
           transparent={true}
           opacity={0.4}
-          color={new THREE.Color('#e2e8f0')} // Tailwind's gray-200
+          color={new THREE.Color('#e2e8f0')}
         />
       </Sphere>
-      <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} rotateSpeed={0.4} />
+      <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} rotateSpeed={10} />
     </>
   )
 }
@@ -96,7 +101,7 @@ const HeroSection = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-indigo-900/90"></div>
       </div>
-      <div className="relative z-10 text-center md:text-left md:w-1/2 px-4 md:pl-16 py-16">
+      <div className="relative  text-center md:text-left md:w-1/2 px-4 md:pl-16 py-16">
         <motion.h1 
           className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400 leading-tight mb-6"
           initial={{ opacity: 0, y: -50 }}
@@ -123,7 +128,7 @@ const HeroSection = () => {
           </Button>
         </motion.div>
       </div>
-      <div className="relative z-10 w-full md:w-1/2 h-[400px] md:h-screen">
+      <div className="relative w-full md:w-1/2 h-[400px] md:h-screen">
         <Suspense fallback={<div className="text-white text-center">Loading Earth...</div>}>
           <Canvas camera={{ position: [0, 0, 3], fov: 50 }}>
             <EarthSphere />
@@ -131,9 +136,9 @@ const HeroSection = () => {
         </Suspense>
       </div>
       <motion.img
-        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/astronaut-PBHf6nODOJ5310RqaXxgTcVWxhBBBE.png"
+        src={Astronut}
         alt="Floating Astronaut"
-        className="absolute bottom-20 right-10 w-32 h-32 md:w-48 md:h-48 z-20"
+        className="absolute bottom-40 right-20 w-32 h-32 md:w-48 md:h-48 "
         animate={{ 
           y: [0, -20, 0],
           rotate: [0, 10, -10, 0]
@@ -144,9 +149,9 @@ const HeroSection = () => {
         }}
       />
       <motion.img
-        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/satellite-j9Mf8ZkCkGDXBJZBXUZUFXZbTqGEzx.png"
+        src={Satellite}
         alt="Satellite"
-        className="absolute top-40 left-10 w-24 h-24 md:w-32 md:h-32 z-20"
+        className="absolute top-10 left-20 w-24 h-24 md:w-32 md:h-32 "
         animate={{ 
           rotate: 360,
           scale: [1, 1.1, 1]
@@ -314,6 +319,7 @@ const HowItWorksSection = () => {
             { icon: TrendingUp, title: "Track Progress", description: "Monitor your growth and earn achievements" },
           ].map((step, index) => (
             <motion.div key={index} variants={itemVariants} className="flex flex-col items-center text-center">
+              
               <motion.div 
                 className="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center mb-4"
                 whileHover={{ scale: 1.1, rotate: 360  }}
