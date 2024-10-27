@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Home, Info, Zap, User, Award, Users, Settings, LogOut, Moon, Sun, Rocket, BarChart } from 'lucide-react'
+import { Home, Info, Zap, User, Award, Users, Settings, LogOut, Moon, Sun, Rocket, BarChart, Trophy } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 const navItems = [
@@ -19,6 +19,7 @@ const navItems = [
   { name: "About", icon: Info },
   { name: "Challenges", icon: Zap },
   { name: "Mentorship", icon: Users },
+  { name: "Gamification", icon: Trophy },
 ]
 
 export default function NavBar({ activeTab, setActiveTab, userPoints = 1000 }) {
@@ -80,30 +81,42 @@ export default function NavBar({ activeTab, setActiveTab, userPoints = 1000 }) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setActiveTab('profile')}>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setActiveTab('achievements')}>
-                <Award className="mr-2 h-4 w-4" />
-                <span>Achievements</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setActiveTab('leaderboard')}>
-                <BarChart className="mr-2 h-4 w-4" />
-                <span>Leaderboard</span>
+              <DropdownMenuItem>
+                <Button variant="ghost" className="w-full justify-start" onClick={() => setActiveTab('profile')}>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+                <Button variant="ghost" className="w-full justify-start" onClick={() => setActiveTab('achievements')}>
+                  <Award className="mr-2 h-4 w-4" />
+                  <span>Achievements</span>
+                </Button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Award className="mr-2 h-4 w-4" />
-                <span>Points: {userPoints}</span>
+                <Button variant="ghost" className="w-full justify-start" onClick={() => setActiveTab('leaderboard')}>
+                  <BarChart className="mr-2 h-4 w-4" />
+                  <span>Leaderboard</span>
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Button variant="ghost" className="w-full justify-start" onClick={() => setActiveTab('settings')}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <Button variant="ghost" className="w-full justify-start">
+                  <Award className="mr-2 h-4 w-4" />
+                  <span>Points: {userPoints}</span>
+                </Button>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
+                <Button variant="ghost" className="w-full justify-start">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

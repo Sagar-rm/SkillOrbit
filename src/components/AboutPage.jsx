@@ -13,6 +13,7 @@ export default function AboutPage() {
   ]
 
   return (
+    
     <div className="space-y-8">
       <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">About SkillOrbit</h2>
       <p className="text-xl text-gray-300 text-center max-w-3xl mx-auto">

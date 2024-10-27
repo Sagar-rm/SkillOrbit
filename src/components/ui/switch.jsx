@@ -1,31 +1,30 @@
-import React from 'react'
+// src/components/ui/switch.jsx
+import PropTypes from 'prop-types';
 
-function Switch({ id, checked, onChange, label }) {
+export function Switch({ isOn, onToggle, label }) {
   return (
-    <div className="flex items-center">
-      <label htmlFor={id} className="flex items-center cursor-pointer">
-        <div className="relative">
-          <input
-            type="checkbox"
-            id={id}
-            className="sr-only"
-            checked={checked}
-            onChange={onChange}
-          />
-          <div className={`block w-14 h-8 rounded-full transition-colors duration-300 ease-in-out ${
-            checked ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
-          }`}></div>
-          <div className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ease-in-out ${
-            checked ? 'transform translate-x-6' : ''
-          }`}></div>
-        </div>
-        {label && (
-          <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-            {label}
-          </span>
-        )}
-      </label>
-    </div>
-  )
+    <label className="flex items-center space-x-2">
+      <span className="text-gray-700">{label}</span>
+      <div
+        className={`relative inline-block w-10 h-6 transition duration-200 ease-linear rounded-full ${
+          isOn ? 'bg-blue-500' : 'bg-gray-300'
+        }`}
+        onClick={onToggle}
+      >
+        <span
+          className={`absolute left-1 top-1 w-4 h-4 transform transition-transform duration-200 ease-linear rounded-full bg-white ${
+            isOn ? 'translate-x-4' : ''
+          }`}
+        />
+      </div>
+    </label>
+  );
 }
+
+Switch.propTypes = {
+  isOn: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  label: PropTypes.string,
+};
+
 export default Switch;

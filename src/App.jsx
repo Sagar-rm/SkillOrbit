@@ -11,6 +11,7 @@ import ProfilePage from '@/components/ProfilePage'
 import AchievementsPage from '@/components/AchievementsPage'
 import MentorshipPage from '@/components/MentorshipPage'
 import LeaderboardPage from '@/components/LeaderboardPage'
+import SettingsPage from '@/components/SettingsPage'
 
 export default function SkillBuildingPlatform() {
   const [activeTab, setActiveTab] = useState("home")
@@ -44,9 +45,13 @@ export default function SkillBuildingPlatform() {
               completedChallenges={completedChallenges} 
             />
           </TabsContent>
+          `<TabsContent value="settings">`
+`<SettingsPage />`
+`</TabsContent>`
           <TabsContent value="achievements"><AchievementsPage /></TabsContent>
           <TabsContent value="mentorship"><MentorshipPage /></TabsContent>
           <TabsContent value="leaderboard"><LeaderboardPage /></TabsContent>
+
         </Tabs>
       </main>
     </div>

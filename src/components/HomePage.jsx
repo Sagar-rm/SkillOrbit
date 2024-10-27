@@ -1,139 +1,412 @@
-import React from 'react'
+"use client"
+
+import React, { useRef, Suspense } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Code, Users, Trophy, UserPlus, Zap, TrendingUp, Star, Book, Globe, Rocket, CheckCircle, Sparkles } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { ArrowRight, Code, Users, Trophy, UserPlus, Zap, TrendingUp, Sparkles } from 'lucide-react'
+import { motion, useAnimation } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Sphere, OrbitControls } from '@react-three/drei'
+import * as THREE from 'three'
 
-export default function HomePage() {
+const EarthSphere = () => {
+  const earthRef = useRef()
+  const cloudRef = useRef()
+
+  useFrame(({ clock }) => {
+    const elapsedTime = clock.getElapsedTime()
+    earthRef.current.rotation.y = elapsedTime / 15
+    cloudRef.current.rotation.y = elapsedTime / 10
+  })
+
   return (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section className="relative min-h-[calc(100vh-6rem)] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://4kwallpapers.com/images/walls/thumbs_2t/14974.jpg"
-            alt="Space Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-indigo-900/90"></div>
-        </div>
-        <div className="relative text-center space-y-8 px-4">
-          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400 leading-tight">
-            Welcome to SkillOrbit
-          </h1>
-          <p className="text-2xl md:text-3xl text-gray-300 max-w-3xl mx-auto">
-            Sharpen Your Skills, Forge Your Future
-          </p>
+    <>
+      <ambientLight intensity={0.1} />
+      <pointLight position={[10, 10, 10]} intensity={1.5} />
+      <Sphere ref={earthRef} args={[1, 64, 64]} rotation={[0, 0, 0.3]}>
+        <meshPhongMaterial
+          map={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
+          bumpMap={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
+          bumpScale={0.05}
+          color={new THREE.Color('#4299e1')} // Tailwind's blue-500
+        />
+      </Sphere>
+      <Sphere ref={cloudRef} args={[1.01, 64, 64]}>
+        <meshPhongMaterial
+          map={new THREE.TextureLoader().load('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w.earth2-63ois9DhkeEoydTv3d6vdsZwCvZZVy.png')}
+          transparent={true}
+          opacity={0.4}
+          color={new THREE.Color('#e2e8f0')} // Tailwind's gray-200
+        />
+      </Sphere>
+      <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} rotateSpeed={0.4} />
+    </>
+  )
+}
+
+const StarField = () => {
+  const generateStars = (count) => {
+    return Array.from({ length: count }, () => ({
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      animationDuration: Math.random() * 3 + 2,
+      animationDelay: Math.random() * 2,
+    }))
+  }
+
+  const stars = generateStars(800)
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {stars.map((star, index) => (
+        <motion.div
+          key={index}
+          className="absolute bg-white rounded-full"
+          style={{
+            top: `${star.y}%`,
+            left: `${star.x}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+          }}
+          animate={{
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: star.animationDuration,
+            repeat: Infinity,
+            delay: star.animationDelay,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+const HeroSection = () => {
+  return (
+    <section className="relative min-h-screen flex flex-col md:flex-row items-center justify-center overflow-hidden">
+      <StarField />
+      <div className="absolute inset-0 z-0">
+        <img
+          src="https://4kwallpapers.com/images/walls/thumbs_2t/14974.jpg"
+          alt="Space Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-indigo-900/90"></div>
+      </div>
+      <div className="relative z-10 text-center md:text-left md:w-1/2 px-4 md:pl-16 py-16">
+        <motion.h1 
+          className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400 leading-tight mb-6"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Welcome to SkillOrbit
+        </motion.h1>
+        <motion.p 
+          className="text-2xl md:text-3xl text-gray-300 max-w-xl mb-8"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          Sharpen Your Skills, Forge Your Future
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
           <Button size="lg" className="bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white text-lg py-6 px-8 rounded-full transform hover:scale-105 transition-all duration-300">
             Start Your Journey <ArrowRight className="ml-2" />
           </Button>
-          <motion.img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/astronaut-PBHf6nODOJ5310RqaXxgTcVWxhBBBE.png"
-            alt="Floating Astronaut"
-            className="absolute bottom-20 right-10 w-32 h-32 md:w-48 md:h-48"
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/satellite-j9Mf8ZkCkGDXBJZBXUZUFXZbTqGEzx.png"
-            alt="Satellite"
-            className="absolute top-40 left-10 w-24 h-24 md:w-32 md:h-32"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          />
-        </div>
-      </section>
+        </motion.div>
+      </div>
+      <div className="relative z-10 w-full md:w-1/2 h-[400px] md:h-screen">
+        <Suspense fallback={<div className="text-white text-center">Loading Earth...</div>}>
+          <Canvas camera={{ position: [0, 0, 3], fov: 50 }}>
+            <EarthSphere />
+          </Canvas>
+        </Suspense>
+      </div>
+      <motion.img
+        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/astronaut-PBHf6nODOJ5310RqaXxgTcVWxhBBBE.png"
+        alt="Floating Astronaut"
+        className="absolute bottom-20 right-10 w-32 h-32 md:w-48 md:h-48 z-20"
+        animate={{ 
+          y: [0, -20, 0],
+          rotate: [0, 10, -10, 0]
+        }}
+        transition={{ 
+          y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+        }}
+      />
+      <motion.img
+        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/satellite-j9Mf8ZkCkGDXBJZBXUZUFXZbTqGEzx.png"
+        alt="Satellite"
+        className="absolute top-40 left-10 w-24 h-24 md:w-32 md:h-32 z-20"
+        animate={{ 
+          rotate: 360,
+          scale: [1, 1.1, 1]
+        }}
+        transition={{ 
+          rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+          scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+        }}
+      />
+    </section>
+  )
+}
 
-      {/* Features Section */}
-      <section className="relative py-16">
-        <div className="absolute inset-0">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/features-background.jpg"
-            alt="Features Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 to-indigo-900/90"></div>
-        </div>
-        <div className="relative container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-indigo-400 mb-12">Why Choose SkillOrbit?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Code, title: "100+ Challenges", description: "Tackle diverse coding and design challenges to enhance your skills" },
-              { icon: Users, title: "Expert Mentors", description: "Learn from industry professionals and accelerate your growth" },
-              { icon: Trophy, title: "Competitive Leaderboard", description: "Compete with peers and showcase your achievements" },
-            ].map((feature, index) => (
-              <Card key={index} className="bg-slate-800/50 backdrop-blur-md border-2 border-indigo-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-400/20 hover:border-indigo-400 relative overflow-hidden group">
+const FeaturesSection = () => {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  React.useEffect(() => {
+    if (inView) {
+      controls.start('visible')
+    }
+  }, [controls, inView])
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  }
+
+  return (
+    <section className="relative py-16">
+      <div className="absolute inset-0">
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/features-background.jpg"
+          alt="Features Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 to-indigo-900/90"></div>
+      </div>
+      <div className="relative container mx-auto px-4">
+        <motion.h2 
+          className="text-4xl font-bold text-center text-indigo-400 mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          Why Choose SkillOrbit?
+        </motion.h2>
+        <motion.div 
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
+          {[
+            { icon: Code, title: "100+ Challenges", description: "Tackle diverse coding and design challenges to enhance your skills" },
+            { icon: Users, title: "Expert Mentors", description: "Learn from industry professionals and accelerate your growth" },
+            { icon: Trophy, title: "Competitive Leaderboard", description: "Compete with peers and showcase your achievements" },
+          ].map((feature, index) => (
+            <motion.div key={index} variants={itemVariants}>
+              <Card className="bg-slate-800/50 backdrop-blur-md border-2 border-indigo-400/50 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-400/20 hover:border-indigo-400 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/0 via-indigo-400/30 to-indigo-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
                 <CardHeader>
-                  <feature.icon className="w-12 h-12 text-cyan-400 mb-4" />
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <feature.icon className="w-12 h-12 text-cyan-400 mb-4" />
+                  </motion.div>
                   <CardTitle className="text-2xl font-bold text-indigo-400">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300">{feature.description}</p>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
-      {/* How It Works Section */}
-      <section className="relative py-16">
-        <div className="absolute inset-0">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/how-it-works-background.jpg"
-            alt="How It Works Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-indigo-900/80"></div>
-        </div>
-        <div className="relative container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-indigo-400 mb-12">How SkillOrbit Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {[
-              { icon: UserPlus, title: "Sign Up", description: "Create your account and set your learning goals" },
-              { icon: Zap, title: "Take Challenges", description: "Complete daily challenges tailored to your skill level" },
-              { icon: Users, title: "Collaborate", description: "Join study groups and work on projects together" },
-              { icon: TrendingUp, title: "Track Progress", description: "Monitor your growth and earn achievements" },
-            ].map((step, index) => (
-              <div key={index} className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center mb-4">
-                  <step.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-cyan-400 mb-2">{step.title}</h3>
-                <p className="text-gray-300">{step.description}</p>
-              </div>
-            ))}
-          </div>
-          <ParticleEffect />
-        </div>
-      </section>
+const HowItWorksSection = () => {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
 
-      {/* Testimonials Section */}
-      <section className="relative py-16">
-        <div className="absolute inset-0">
-          <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/testimonials-background.jpg"
-            alt="Testimonials Background"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-indigo-900/90"></div>
-        </div>
-        <div className="relative container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-indigo-400 mb-12">What Our Users Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: "Alex Johnson", role: "Full Stack Developer", quote: "SkillOrbit has been instrumental in advancing my coding skills. The challenges are both fun and practical!" },
-              { name: "Sarah Lee", role: "UX Designer", quote: "I love the design-focused challenges. They've helped me think outside the box and improve my creativity." },
-              { name: "Mike Chen", role: "Data Scientist", quote: "The mentorship program is fantastic. I've learned so much from experienced professionals in my field." },
-            ].map((testimonial, index) => (
-              <Card key={index} className="bg-gradient-to-br from-slate-800/50 to-indigo-800/50 backdrop-blur-md border-2 border-indigo-500">
+  React.useEffect(() => {
+    if (inView) {
+      controls.start('visible')
+    }
+  }, [controls, inView])
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  }
+
+  return (
+    <section className="relative py-16">
+      <div className="absolute inset-0">
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/how-it-works-background.jpg"
+          alt="How It Works Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-indigo-900/80"></div>
+      </div>
+      <div className="relative container mx-auto px-4">
+        <motion.h2 
+          className="text-4xl font-bold text-center text-indigo-400 mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          How SkillOrbit Works
+        </motion.h2>
+        <motion.div 
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="grid grid-cols-1 md:grid-cols-4 gap-8"
+        >
+          {[
+            { icon: UserPlus, title: "Sign Up", description: "Create your account and set your learning goals" },
+            { icon: Zap, title: "Take Challenges", description: "Complete daily challenges tailored to your skill level" },
+            { icon: Users, title: "Collaborate", description: "Join study groups and work on projects together" },
+            { icon: TrendingUp, title: "Track Progress", description: "Monitor your growth and earn achievements" },
+          ].map((step, index) => (
+            <motion.div key={index} variants={itemVariants} className="flex flex-col items-center text-center">
+              <motion.div 
+                className="w-16 h-16 rounded-full bg-indigo-500 flex items-center justify-center mb-4"
+                whileHover={{ scale: 1.1, rotate: 360  }}
+                transition={{ duration: 0.5 }}
+              >
+                <step.icon className="w-8 h-8 text-white" />
+              </motion.div>
+              <h3 className="text-xl font-bold text-cyan-400 mb-2">{step.title}</h3>
+              <p className="text-gray-300">{step.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+const TestimonialsSection = () => {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  React.useEffect(() => {
+    if (inView) {
+      controls.start('visible')
+    }
+  }, [controls, inView])
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  }
+
+  return (
+    <section className="relative py-16">
+      <div className="absolute inset-0">
+        <img
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/testimonials-background.jpg"
+          alt="Testimonials Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-indigo-900/90"></div>
+      </div>
+      <div className="relative container mx-auto px-4">
+        <motion.h2 
+          className="text-4xl font-bold text-center text-indigo-400 mb-12"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          What Our Users Say
+        </motion.h2>
+        <motion.div 
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
+          {[
+            { name: "Alex Johnson", role: "Full Stack Developer", quote: "SkillOrbit has been instrumental in advancing my coding skills. The challenges are both fun and practical!" },
+            { name: "Sarah Lee", role: "UX Designer", quote: "I love the design-focused challenges. They've helped me think outside the box and improve my creativity." },
+            { name: "Mike Chen", role: "Data Scientist", quote: "The mentorship program is fantastic. I've learned so much from experienced professionals in my field." },
+          ].map((testimonial, index) => (
+            <motion.div key={index} variants={itemVariants}>
+              <Card className="bg-gradient-to-br from-slate-800/50 to-indigo-800/50 backdrop-blur-md border-2 border-indigo-500">
                 <CardContent className="pt-6">
                   <p className="text-gray-300 mb-4">"{testimonial.quote}"</p>
                   <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 flex items-center justify-center mr-4">
+                    <motion.div 
+                      className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 flex items-center justify-center mr-4"
+                      whileHover={{ scale: 1.1, rotate: 360 }}
+                      transition={{ duration: 0.5 }}
+                    >
                       <span className="text-xl font-bold text-white">{testimonial.name[0]}</span>
-                    </div>
+                    </motion.div>
                     <div>
                       <p className="font-semibold text-indigo-400">{testimonial.name}</p>
                       <p className="text-sm text-gray-400">{testimonial.role}</p>
@@ -141,43 +414,56 @@ export default function HomePage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="relative py-16 bg-gradient-to-r from-slate-900 to-indigo-900">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-indigo-400 mb-6">Ready to Orbit Your Skills?</h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of learners who are already sharpening their skills and advancing their careers with SkillOrbit.
-          </p>
-          <Button size="lg" className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 text-lg py-4 px-8 rounded-full transition-all duration-300 animate-pulse">
-            Get Started Now <ArrowRight className="ml-2" />
-          </Button>
-        </div>
-      </section>
-    </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
   )
 }
 
-const ParticleEffect = () => {
+const CTASection = () => {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(50)].map((_, i) => (
-        <Sparkles
-          key={i}
-          className="absolute text-cyan-400 opacity-50"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            fontSize: `${Math.random() * 10 + 5}px`,
-            animationDuration: `${Math.random() * 3 + 2}s`,
-            animationDelay: `${Math.random() * 2}s`,
-          }}
-        />
-      ))}
+    <section className="relative py-16 bg-gradient-to-r from-slate-900 to-indigo-900">
+      <div className="container mx-auto px-4 text-center">
+        <motion.h2 
+          className="text-4xl font-bold text-indigo-400 mb-6"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          Ready to Orbit Your Skills?
+        </motion.h2>
+        <motion.p 
+          className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Join thousands of learners who are already sharpening their skills and advancing their careers with SkillOrbit.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <Button size="lg" className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 text-lg py-4 px-8 rounded-full transition-all duration-300 animate-pulse">
+            Get Started Now <ArrowRight className="ml-2" />
+          </Button>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <div className="space-y-16">
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorksSection />
+      <TestimonialsSection />
+      <CTASection />
     </div>
   )
 }
