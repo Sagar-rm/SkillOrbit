@@ -11,6 +11,10 @@ import { Sphere, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import  Satellite  from '@/assets/satellite.png'
 import  Astronut from '@/assets/astrounat.png'
+import  Features from '@/assets/features.jpeg'
+// import  Bg from '@/assets/'
+
+
 
 
 const EarthSphere = () => {
@@ -151,7 +155,7 @@ const HeroSection = () => {
       <motion.img
         src={Satellite}
         alt="Satellite"
-        className="absolute top-10 left-20 w-24 h-24 md:w-32 md:h-32 "
+        className="absolute top-0 left-20 w-24 h-24 md:w-32 md:h-32 "
         animate={{ 
           rotate: 360,
           scale: [1, 1.1, 1]
@@ -202,8 +206,8 @@ const FeaturesSection = () => {
     <section className="relative py-16">
       <div className="absolute inset-0">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/features-background.jpg"
-          alt="Features Background"
+          src={Features}
+           alt="Features Background"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 to-indigo-900/90"></div>
@@ -290,7 +294,7 @@ const HowItWorksSection = () => {
     <section className="relative py-16">
       <div className="absolute inset-0">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/how-it-works-background.jpg"
+          // src={Bg}
           alt="How It Works Background"
           className="w-full h-full object-cover"
         />
