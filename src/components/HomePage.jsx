@@ -12,7 +12,8 @@ import * as THREE from 'three'
 import  Satellite  from '@/assets/satellite.png'
 import  Astronut from '@/assets/astrounat.png'
 import  Features from '@/assets/features.jpeg'
-// import  Bg from '@/assets/'
+import  Bg from '@/assets/bg.png'
+import Testimonial from '@/assets/testimonial.jpeg'
 
 
 
@@ -294,7 +295,7 @@ const HowItWorksSection = () => {
     <section className="relative py-16">
       <div className="absolute inset-0">
         <img
-          // src={Bg}
+          src={Bg}
           alt="How It Works Background"
           className="w-full h-full object-cover"
         />
@@ -378,7 +379,7 @@ const TestimonialsSection = () => {
     <section className="relative py-16">
       <div className="absolute inset-0">
         <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/testimonials-background.jpg"
+          src={Testimonial}
           alt="Testimonials Background"
           className="w-full h-full object-cover"
         />
